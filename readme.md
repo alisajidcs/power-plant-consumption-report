@@ -1,17 +1,6 @@
-### Heading
+### How to Use
 
-## Setup
-
-Run these commands in sequence 
-
-`npm install`
-
-`npx sequelize-cli db:migrate`
-
-`npx sequelize-cli db:seed:all`
-
-
-Now the data is ready in database and you start the server
+Once the data is ready in database and you start the server using one of the methods below
 
 `npm run dev`
 
@@ -26,5 +15,24 @@ here are some optional query params
 *state:* Retrieve data from a specific state
 
 - localhost:8000//api/v1/record?limit=15&state=AL
+
+
+# Options to setup
+
+## 1. Setup-docker
+
+`docker-compose up`
+
+
+## 2. Setup-local
+
+Run these commands in sequence 
+
+`npm install`
+
+`npx sequelize-cli db:migrate`
+
+`npx sequelize-cli db:seed:all`
+
 
 

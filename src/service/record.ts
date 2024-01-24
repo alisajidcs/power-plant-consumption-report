@@ -5,30 +5,30 @@ interface IRecordService {
 }
 
 export class RecordService implements IRecordService {
+  private queryTotalStateGeneration = `
+    SELECT
+      SUM("netGeneration") FROM record r2
+    WHERE r2.state = r.state
+    GROUP BY r2.state
+  `;
+
+  private mainQuery = `
+    SELECT
+      name,
+      ABS("netGeneration"),
+      state,
+      longitude,
+      latitude,
+      ("netGeneration"::decimal / (${this.queryTotalStateGeneration})) * 100 as percentage
+    FROM record r 
+  `;
+
   async getTopRecord(limit: number, state?: string): Promise<any> {
-    const queryTotalStateGeneration = `
-      SELECT
-        SUM("netGeneration") FROM record r2
-      WHERE r2.state = r.state
-      GROUP BY r2.state
-    `;
-
-    const mainQuery = `
-      SELECT
-        name,
-        ABS("netGeneration"),
-        state,
-        longitude,
-        latitude,
-        ("netGeneration"::decimal / (${queryTotalStateGeneration})) * 100 as percentage
-      FROM record r 
-    `;
-
     const where = (state: string) => `WHERE state = '${state}'`;
     const orderBy = `ORDER BY r."netGeneration" desc`;
     const limitQuery = (limit: number) => `limit ${limit}`;
 
-    let rawQuery = mainQuery;
+    let rawQuery = this.mainQuery;
     if (state) {
       rawQuery += where(state) + " ";
     }
